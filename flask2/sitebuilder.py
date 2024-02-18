@@ -13,7 +13,7 @@ def index():
     return render_template("main.html")
 
 
-################# Data collection and calibration
+# ----- Data collection and calibration -----
 # Records the training data and trains the regression models from embeddings
 @app.route('/datacollection/')
 def datacollect():
@@ -26,13 +26,7 @@ def offlinetraining():
     return render_template("mainTesting.html")
 
 
-################# Live testing for debugging
-# Tests the original model in real-time
-@app.route('/uncalibtest/')
-def uncalibtest():
-    return render_template("livetest.html")
-
-
+# ----- Live testing for debugging -----
 # Tests the original model, boosted with the regression model in real-time
 @app.route('/svrtest/')
 def svrtest():
@@ -45,14 +39,7 @@ def svreyesonly():
     return render_template("svreyesonly.html")
 
 
-################# Prep for evaluating gaze + accel.
-# Gesture detection standalone
-@app.route('/gestures/')
-def gestures():
-    return render_template("gesturepractice.html")
-
-
-################# Evaluation of gaze + acceleration together
+# ----- Evaluation of gaze + acceleration together -----
 # Evaluates performance of the regression model, then prints output.
 @app.route('/grideval/')
 def grideval():
@@ -64,71 +51,16 @@ def listeval():
     return render_template("evallist.html")
 
 
-################# Show results from the grid and list evaluations
+# ----- Show results from the grid and list evaluations -----
 @app.route("/results/")
 def results():
     return render_template("blockresults.html")
 
 
-############################ Misc showcases and debug screens.
-
-# Just shows facemesh and yaw/pitch/roll calculations
-@app.route('/facemeshdemo/')
-def facemeshdemo():
-    return render_template("facemeshdemo.html")
-
-
-# Requests acceleration, then displays a dot indicating tilt degrees.
-@app.route('/acceldemo/')
-def acceldemo():
-    return render_template("accel.html")
-
-
-# shows where the face's angle is on-screen
-@app.route('/faceangle/')
-def faceangle():
-    return render_template("faceangle.html")
-
-
+# ----- Misc showcases and debug screens. -----
 @app.route("/testing/")
 def testing():
     return render_template("mainTesting.html")
-
-
-################### Applications/Interactions
-@app.route('/zoo/1/')
-def zoo1():
-    return render_template("zoo.html", zooNum=1)
-
-
-@app.route('/zoo/notification/')
-def zoo2():
-    return render_template("zoo.html", zooNum=2)
-
-
-@app.route('/photos/')
-def photos():
-    return render_template("zoo.html", zooNum=3)
-
-
-@app.route('/notif/')
-def notif():
-    return render_template("notificationsdemo.html")
-
-
-@app.route('/email/')
-def email():
-    return render_template("emaildemo.html")
-
-
-@app.route('/homescreen/')
-def homescreen():
-    return render_template("homescreendemo.html")
-
-
-@app.route('/music/')
-def music():
-    return render_template("musicdemo.html")
 
 
 @app.route('/dictionary/')

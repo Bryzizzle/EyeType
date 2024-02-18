@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, redirect
 from flask_frozen import Freezer
 import os, sys, datetime
 
@@ -10,7 +10,22 @@ freezer = Freezer(app)
 
 @app.route('/')
 def index():
+    return render_template("index.html")
+
+
+@app.route('/old')
+def old_index():
     return render_template("main.html")
+
+
+@app.route('/getstarted')
+def getstarted():
+    return render_template("getstarted.html")
+
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
 
 # ----- Data collection and calibration -----
@@ -28,9 +43,13 @@ def offlinetraining():
 
 # ----- Live testing for debugging -----
 # Tests the original model, boosted with the regression model in real-time
-@app.route('/svrtest/')
-def svrtest():
+@app.route('/keyboard/')
+def keyboard():
     return render_template("svr.html")
+
+@app.route('/svrtest/')
+def keyboard_redir():
+    return redirect("/keyboard", 301)
 
 
 # Tests the original model, boosted with the regression model in real-time

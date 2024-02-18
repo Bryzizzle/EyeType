@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block headextra %}
+<meta name="viewport" content="initial-scale=1.0" />
+
+<!--Other ML library-->
+<!--<script src="http://mlweb.loria.fr/ml.js"></script>-->
+<script src="{{url_for('static', filename='mlweb.js')}}"></script>
+
+
+            <!--Tensorflow javascript import-->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<!-- Custom JS for GAZEL -->
+<script src="{{url_for('static', filename='ML.js')}}"></script>
+<script src="{{url_for('static', filename='transfer.js')}}"></script>
+<script src="{{url_for('static', filename='fileIO.js')}}"></script>
+<script src="{{url_for('static', filename='mainTesting.js')}}"></script>
+
+
+
+<script>
+    function checkRegressionModel(){
+        elem = document.getElementById('regressionModelFound');
+        elem.style.textAlign = "center";
+
+        regModel = localStorage['svr_x'];
+        if (regModel == undefined || regModel.length == 0){
+            elem.innerHTML = `Personalized Model Not Found <br>
+            <a href='/grideval/?name=grid1' target="_blank">Start Anyway</a> <br>`;
+            elem.style.backgroundColor = "pink";
+        } else {
+            // elem.innerText = "Personalized Model Found <br> Click to start evaluation";
+            elem.innerHTML = `Personalized Model Found <br> 
+            <a href='/grideval/?name=grid1' target="_blank">Grid Eval 1</a> <br>
+            <a href='/grideval/?name=grid2' target="_blank">Grid Eval 2</a> <br>
+            <a href='/grideval/?name=grid3' target="_blank">Grid Eval 3</a> <br>
+            <a href='/listeval/?name=list1' target="_blank">List Eval 1</a> <br>
+            <a href='/listeval/?name=list2' target="_blank">List Eval 2</a> <br>
+            <a href='/listeval/?name=list3' target="_blank">List Eval 3</a> <br>`;
+            elem.style.backgroundColor = "lightgreen";
+        }
+    }
+
+    function enlargeButtons(){
+        elems = document.getElementsByTagName("button");
+        elems.forEach((elem) => {
+            elem.style.fontSize = "100%";
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+           console.log("DOM fully loaded and parsed");
+           checkRegressionModel();
+           enlargeButtons();
+    });
+
+    document.addEventListener('click', printMousePos, true);
+    function printMousePos(e){
+          cursorX = e.pageX;
+          cursorY= e.pageY;
+          console.log("x: " + cursorX + ", y: " + cursorY);
+    }
+
+
+    //main();
+</script>
+
+
+
+<style>
+
+    :root {
+      --innerpadding: 5%;
+    }
+
+    body, html {
+      width: 99%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      height: auto;
+    }
+
+    .panelrow{
+      display: flex;
+    }
+
+    .leftpane {
+        width: 50%;
+        /*height: 100%;*/
+        float: left;
+        /*background-color: rosybrown;*/
+        border-collapse: collapse;
+        border-color:grey;
+        box-sizing: border-box;
+        display:block;
+    }
+
+    .rightpane {
+      width: 50%;
+      /*height: 100%;*/
+      position: relative;
+      float: right;
+      /* background-color: yellow; */
+      border-collapse: collapse;
+      border-left-style: dotted;
+      box-sizing: border-box;
+      border-color:grey;
+      display:block;
+    }
+
+    .toppane {
+      width: 100%;
+      /*height: 10%;*/
+      border-collapse: collapse;
+      /*background-color: #4da6ff;*/
+      border-style: double;
+      display:block;
+      border-color:grey;
+    }
+
+    p {
+      padding: var(--innerpadding);
+    }
+
+    h1{
+      padding-left: var(--innerpadding);
+      padding-right: var(--innerpadding);
+    }
+
+    h2{
+      padding-left: var(--innerpadding);
+      padding-right: var(--innerpadding);
+    }
+
+    button{
+        display: inline-block;
+        fontSize: 200% !important;
+        overflow:auto;
+        -webkit-appearance:none;
+        background-color: #ccc;
+
+    }
+
+    div{
+        overflow-wrap:normal;
+    }
+
+</style>
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container">
+    <div class="toppane" style="text-align:center; overflow:auto">
+        <h1> GAZEL</h1>
+        <h4>Gaze + Accelerometer Mobile Interactions</h4>
+    </div>
+
+    <div class="toppane" style="overflow:auto">
+        <p style="text-align:center;">
+            Hello! Thanks for participating in our research in novel smartphone interactions.
+        </p>
+        <h2>
+            Before you start:
+        </h2>
+        <ul>
+            <li>You should be using a <b>smartphone in portrait mode (vertical)</b> to do this study. It is eye tracking on smartphones, after all.</li>
+            <li>The data collection and evaluation pages should trigger a "Do you want to let this page use your camera" warning. If you don't see this popup or you tap and nothing starts, then make sure you enable camera access for your browser (Safari/Chrome, etc.)</li>
+            <li>Please make sure that you're <b>not in an incognito tab</b>, or else we won't be able to save your personalized model.</li>
+            <li>Make sure that you're in a <b>well-lit area</b>. If you can read comfortably, the lighting is fine.</li>
+            <li>If you have any questions, or feedback on the interface or experience, please let us know!</li>
+        </ul>
+
+        <h2>
+            Instructions:
+        </h2>
+        <ol>
+            <li>Create an eye tracker personalized to you</li>
+            <li>Evaluate the performance of the personalized eye tracking</li>
+        </ol>
+    </div>
+</div>
+
+<div class="panelrow">
+  <div class="leftpane" id="left1">
+    <h3 style="text-align:center">1. Personalize</h3>
+
+      <p>
+        On this page, you'll be asked to track a circle around the screen with your eyes in 5 different rounds of data collection. The circle will be red to indicate when we're recording data, so try not to blink until the circle turns blue.
+
+        <br><br>
+
+        Hold your phone at a natural angle. After 5 rounds, we'll use your eye images to train an eye tracker personalized for you.
+
+        <br><br>
+      </p>
+
+      <div style="text-align:center;">
+          <button style="width:75%;height:20%;" onclick="location.href = '/datacollection/'">Press here to start the data collection and model personalization</button>
+          <br><br>
+      </div>
+  </div>
+
+  <div class="rightpane" id="right1">
+    <h3 style="text-align:center">2. Evaluate</h3>
+      <p>
+
+          In this step, you'll test your personalized model.
+            <br><br>
+          To start a new evaluation, refresh the page.
+      </p>
+
+      <p id="regressionModelFound"></p>
+
+      <p>To train a new model, simply redo the personalization section.</p>
+      <button onclick="saveRegressionModels()">Download Personalized Model</button>
+
+
+  </div>
+</div>
+
+<div class="panelrow">
+
+  <div class="leftpane" style="border-top-style: solid;" id="left2">
+    <h3 style="text-align:center">3. See Results</h3>
+      <p>
+          Lastly, go to the results page to see your personalized model's errors. Export them from this page to send us your results as a .json, or view as text and paste them into an email.
+      </p>
+      <div style="text-align:center;">
+          <button style="width:75%; height:20%;" onclick="location.href = '/results/'">Results</button>
+      </div>
+  </div>
+
+  <div class="rightpane" style="border-top-style: solid;" id="right2">
+    <h3 style="text-align:center">Playground</h3>
+      <p>
+          Playground visualizes your personalized model.
+      </p>
+      <div style="text-align:center;">
+          <button style="width:75%; height:20%;" onclick="location.href = '/svrtest/'">Playground</button>
+      </div>
+  </div>
+</div>
+
+
+<div id="main">
+
+      <div class="canvas-wrapper">
+        <canvas id="output"></canvas>
+        <video id="video" playsinline style="
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+          visibility: hidden;
+          width: auto;
+          height: auto;
+          ">
+        </video>
+      </div>
+
+        <br><br>
+        <canvas hidden id="eyecache"></canvas>
+  </div>
+
+
+{% endblock %}

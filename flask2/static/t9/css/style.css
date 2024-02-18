@@ -1,0 +1,117 @@
+html {
+	box-sizing: border-box;
+}
+
+.container#mainpage {
+	margin: 0;
+}
+
+.emulator {
+	width: 95vw;
+	height: 95vh;
+	padding: 10px;
+}
+
+.screen {
+	width: 100%;
+	height: 4rem;
+	box-shadow: inset 0 0 3px rgba(0,0,0,0.7);
+
+	padding: 10px;
+	margin-bottom: 2rem;
+}
+
+.screen .cursor {
+	animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+.screen .current-text {
+	text-decoration: underline;
+}
+
+.screen .prev-text {
+	color: gray;
+}
+
+@-moz-keyframes blinker {  /* Decimal not necessary, 0 and 1 is enough */
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+.keypad {
+	position: relative;
+	width: 100%;
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+}
+
+.keypad-row {
+	display: flex;
+	margin: 0;
+	padding: 0;
+}
+
+.key, .controller {
+	flex-basis: 100%;
+	width: 100%;
+	height: 250px;
+	margin: 0;
+	padding: 0;
+	border: grey 2px solid;
+}
+
+.key {
+	background-color: #eee;
+}
+
+.key.prediction-cycle {
+	border-radius: 0;
+	background-color: #6b9ac4;
+}
+
+.key.delete {
+	border-radius: 0;
+	background-color: #d66161;
+}
+
+.key.key-highlight {
+	background-color: #fff;
+}
+
+.key.key-highlight.prediction-cycle {
+	border-radius: 0;
+	background-color: #96bfe3;
+}
+
+.key.key-highlight.delete {
+	border-radius: 0;
+	background-color: #f28383;
+}
+
+button {
+	border: none;
+}
+
+

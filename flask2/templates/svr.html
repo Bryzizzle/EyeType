@@ -19,6 +19,7 @@
 <!--Other ML library-->
 <script src="{{url_for('static', filename='mlweb.js')}}"></script>
 
+
 <!--Keyboard Imports-->
 <link rel="stylesheet" href="{{url_for('static', filename='t9/css/style.css')}}" type="text/css" />
 <link rel="stylesheet" href="{{url_for('static', filename='t9/css/bootstrap.min.css')}}" type="text/css" />
@@ -87,54 +88,49 @@
 
             <div class="keypad">
               <div class="keypad-row">
-                <button class="key key-1" value="2">
+                <button class="key key-1 key-entry" value="2">
                  <small>abc</small>
                 </button>
-                <button class="key key-2" value="3">
+                <button class="key key-2 key-entry" value="3">
                 <!-- 2 <small>abc</small> -->
                 <small>def</small>
                 </button>
-                <button class="key key-3" value="4">
+                <button class="key key-3 key-entry" value="4">
                 <!-- 3 <small>def</small> -->
                  <small>ghi</small>
                 </button>
-                <div class="controller">
-                  <button class="key prediction-cycle btn"><span class="glyphicon glyphicon-refresh"></span>Cycle</button>
-                </div>
-              </div>
-
-              <div class="keypad-row">
-                <button class="key key-4" value="5">
+                <button class="key key-4 key-entry" value="5">
                  <small>jkl</small>
                 </button>
-                <button class="key key-5" disabled="disabled" value="5">
-                  <span>Key: <small id="debug-key"></small></span>
-                  <span>Dwell Count: <small id="debug-dwell"></small></span>
-                </button>
-                <button class="key key-6" value="6">
+                <button class="key key-6 key-entry" value="6">
                  <small>mno</small>
                 </button>
                 <div class="controller">
-                  <button class="key delete pull-right btn"><span class="glyphicon glyphicon-circle-arrow-left"></span>Delete</button>
+                  <button class="key prediction-cycle btn">Cycle</button>
                 </div>
               </div>
 
               <div class="keypad-row">
-                <button class="key key-7" value="7">
-                 <small>pqrs</small>
+                <button class="key key-7 key-entry" value="7">
+                    <small>pqrs</small>
                 </button>
-                <button class="key key-8" value="8">
-                 <small>tuv</small>
+                <button class="key key-8 key-entry" value="8">
+                    <small>tuv</small>
                 </button>
-                <button class="key key-9" value="9">
-                 <small>wxyz</small>
+                <button class="key key-9 key-entry" value="9">
+                    <small>wxyz</small>
                 </button>
-                <button class="key key-space" value="space">
-                <small>space</small>
+                <button class="key key-space key-entry" value="space">
+                    <small>space</small>
                 </button>
+                <button class="key stop-button red-key slow-trigger" disabled="disabled" value="5">
+                    <small>STOP</small>
+                </button>
+                <div class="controller">
+                  <button class="key delete red-key pull-right btn">Delete</button>
+                </div>
               </div>
             </div>
-
           </div>
 
           <div class="loading">
@@ -143,6 +139,11 @@
               </div>
             </div>
             <p>Downloading dictionary file. Please wait...</p>
+          </div>
+
+          <div class="debug-container">
+              <span>Key: <small id="debug-key"></small> | </span>
+              <span>Dwell Count: <small id="debug-dwell"></small></span>
           </div>
         </div>
 

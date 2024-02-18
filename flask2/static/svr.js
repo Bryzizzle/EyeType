@@ -35,6 +35,7 @@ var dotelem;
 let globalPredX = 0;
 let globalPredY = 0;
 
+
 //Draw the prediction as an orange dot on the screen.
 async function drawPrediction() {
 //    console.log("Drawing prediction in SVR");
@@ -170,7 +171,6 @@ async function drawTargetDot(){
 }
 
 
-var markovNodes;
 var eyeHist = [];
 function showDebug(){
     if (typeof(videoCanvas) == 'undefined'){
@@ -193,11 +193,6 @@ function showDebug(){
         console.log("showing debug");
         document.body.style.backgroundColor = "white";
 
-        // Text displays
-        markovNodes = [];
-        for (i of [1,2,3]){
-            markovNodes.push(makeTextDisplay());
-        }
 
         setInterval(() => {
             // Update eye history
@@ -209,23 +204,6 @@ function showDebug(){
             let truthArr = [prediction.faceInViewConfidence > .9,
                             abs(faceGeom.curYaw) < .3,
                   ((Math.max(...xs) - Math.min(...xs)) < .3) && ((Math.max(...ys) - Math.min(...ys)) < .3)];
-
-            successText = ["1. User Present: True",
-                           "<br>2. Looking At Screen: True",
-                           "<br><br>3. Fixated On Target: True<br>4. Motion Gestures: Running"]
-            failText = ["1. User Present: False",
-                           "<br>2. Looking At Screen: False",
-                           "<br><br>3. Fixated On Target: False<br>4. Motion Gestures: Paused"]
-
-            for (i of [0,1,2]){
-                if (truthArr.slice(0,i+1).every((x) => x)){ // If true up to here,
-                    markovNodes[i].style.color = 'green';
-                    markovNodes[i].innerHTML = successText[i];
-                } else{
-                    markovNodes[i].style.color = 'red';
-                    markovNodes[i].innerHTML = failText[i];
-                }
-            }
 
             // Hide dot if not all proper
             elem = document.getElementById("dotelem");
@@ -242,20 +220,6 @@ function showDebug(){
         }, 50);
 
     }, 500);
-}
-
-
-
-var heightInc = 0;
-function makeTextDisplay(){
-    let tmp = document.createElement("h2");
-    tmp.style.position = "absolute";
-    tmp.style.top = (Math.trunc(window.innerHeight/2)  + 500) + "px";
-    tmp.style.left = "50px";
-    tmp.style.fontSize = "2.5em";
-
-    document.body.append(tmp);
-    return tmp;
 }
 
 // Draw regression button

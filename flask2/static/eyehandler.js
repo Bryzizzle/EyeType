@@ -1,9 +1,16 @@
-setInterval(keyboardUpdate, 200)
+// Tracking Disable
+var disable_tracking = false;
+
+setTimeout(function () {
+    setInterval(keyboardUpdate, 200)
+}, 2000);
 
 var last_button = undefined;
 var button_hits = 0
 
 var last_highlight = undefined;
+
+
 
 function keyboardUpdate() {
     // Get element that the user's looking at
@@ -26,11 +33,21 @@ function keyboardUpdate() {
         // Reset the highlight
         setHighlight(undefined);
 
+        // Reset the dwell time and last_button
+        last_button = undefined;
+        button_hits = 0;
+
+        return;
+    }
+
+    // If the tracking is disabled, then exit (unless its a stop-button)
+    if (disable_tracking && (!target.classList.contains("stop-button"))){
+        last_button = undefined;
         return;
     }
 
     // Update debug text
-    // document.getElementById("debug-key").innerText = target.innerText;
+    document.getElementById("debug-key").innerText = target.innerText;
 
     // Highlight the target
     setHighlight(target);
@@ -43,10 +60,21 @@ function keyboardUpdate() {
         last_button = target;
     }
 
+
+    // Modify the dwell limit depending on the target's class
+    let dwell_limit = 5;
+    if (target.classList.contains("slow-trigger")){
+        dwell_limit = 10;
+    }
+
     // If over dwell time limit, then click
-    if (button_hits >= 5){
+    if (button_hits >= dwell_limit){
         target.click();
         button_hits = 0;
+
+        // Handle the STOP button
+        handleButton(target);
+
         // Update color to green (for a short amount of time)
         document.getElementById("dotelem").style.backgroundColor = "green";
     } else if (button_hits >= 3){
@@ -76,4 +104,65 @@ function setHighlight(elem) {
     } else {
         last_highlight = undefined;
     }
+}
+
+function handleButton(target){
+    // Handle Entry Buttons
+    if (target.classList.contains("key-entry")){
+        if(target.innerText !== "space") {
+            speak(target.innerText.split('').join(" "), 1.25);
+        } else {
+            speak(target.innerText);
+        }
+
+        return;
+    }
+
+    // Handle Delete Button
+    if (target.classList.contains("delete")){
+        speak("delete")
+    }
+
+    // Handle Cycle Button
+    if (target.classList.contains("prediction-cycle")){
+        // Get the currently worked on text
+        let currText = document.querySelector("div.screen>span.current-text").innerText;
+        console.log(currText);
+
+        speak(currText);
+    }
+
+    // Handle Stop Button
+    if (target.classList.contains("stop-button")){
+        if (target.innerText === "STOP"){
+            // If its currently at red STOP, switch it to green START
+            target.innerText = "START";
+            target.classList.add("green-key");
+            target.classList.remove("red-key");
+
+            // Disable tracking
+            disable_tracking = true;
+
+            // Trigger speech
+            speak("Keyboard Stopped.");
+        } else {
+            // If its currently at red STOP, switch it to green START
+            target.innerText = "STOP";
+            target.classList.remove("green-key");
+            target.classList.add("red-key");
+
+            // Disable tracking
+            disable_tracking = false;
+
+            // Trigger speech
+            speak("Keyboard Started.");
+        }
+    }
+}
+
+function speak(text, rate = 1){
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = text;
+    msg.rate = rate;
+    window.speechSynthesis.speak(msg);
 }
